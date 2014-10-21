@@ -1,0 +1,32 @@
+{
+    "name": "openlaw/data",
+    "description": "OpenLaw's data warehousing project",
+    "license": "MIT",
+    "type": "project",
+    "homepage": "http://data.openlaw.org.il/",
+    "authors": [
+        {
+            "name": "Yehuda Deutsch",
+            "email": "yeh@uda.co.il",
+            "homepage": "http://www.uda.co.il/",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "email": "support@openlaw.org.il",
+        "forum": "http://forum.hasadna.org.il/category/5-category/23-category"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=5.5.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "4.*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Openlaw\\": "src/Openlaw/"
+        }
+    }
+}
