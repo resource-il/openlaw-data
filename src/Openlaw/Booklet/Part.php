@@ -6,7 +6,7 @@ use Openlaw\Collection;
 
 class Part extends Collection
 {
-    protected static $collection = 'booklet_part';
+    protected static $collectionName = 'booklet_part';
 
     protected $schema = [
       'booklet' => 0,

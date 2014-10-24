@@ -6,13 +6,13 @@ use Openlaw\Collection;
 
 class Booklet extends Collection
 {
-    protected static $collection = 'booklet';
+    protected static $collectionName = 'booklet';
 
     public static function factory($booklet = 0)
     {
         $query = [];
         if (!empty($booklet) && intval($booklet) == $booklet) {
-            $query = ['booklet' => $booklet];
+            $query = ['booklet' => (int) $booklet];
         }
         return parent::factory($query);
     }
@@ -34,4 +34,19 @@ class Booklet extends Collection
       'created' => 0,
       'updated' => 0,
     ];
+
+    public function getParts()
+    {
+        if (empty($this->booklet)) {
+            return array();
+        }
+        return Part::factoryMultiple(['booklet' => (int) $this->booklet]);
+    }
+
+    public function loadParts()
+    {
+        $this->schema['parts'] = [];
+        $this->parts = $this->getParts();
+        return $this;
+    }
 }
