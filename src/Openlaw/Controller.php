@@ -11,33 +11,42 @@ class Controller
         return new Response($data, $code, $headers);
     }
 
-    protected function json($data = [])
+    protected function json($data = [], $error = [], $usage = [])
     {
-        return $this->response(json_encode(['content' => $data]), ['Content-Type' => 'application/json']);
+        $response = [
+          'content' => $data,
+          'usage' => $usage,
+          'error' => $error,
+          'license' => 'CC-BY-SA',
+          'copyright' => [
+            'year' => '2014',
+            'name' => 'OpenLaw a project of The Public Knowledge Workshop (R.O.)',
+            'url' => 'http://www.openlaw.org.il/',
+          ],
+        ];
+
+        $jsonEncodeOptions = 0;
+        if (!empty($error)) {
+            $jsonEncodeOptions += JSON_FORCE_OBJECT;
+        }
+
+        return $this->response(json_encode($response, $jsonEncodeOptions), ['Content-Type' => 'application/json']);
     }
 
     protected function error($data = [])
     {
-        return $this->response(json_encode($data, JSON_FORCE_OBJECT), ['Content-Type' => 'application/json']);
+
+        return $this->json([], $data);
     }
 
     public function errorHandler(\Exception $e, $code)
     {
-        switch ($code) {
-
-        }
-
-        $code2pass = Response::HTTP_OK;
-
-        return $this->response(
-          json_encode(
-            [
-              'error' => [
-                'code' => $code,
-                'message' => $e->getMessage(),
-              ]
-            ]
-          )
+        return $this->json(
+          [],
+          [
+            'code' => $code,
+            'message' => $e->getMessage(),
+          ]
         );
     }
 }
