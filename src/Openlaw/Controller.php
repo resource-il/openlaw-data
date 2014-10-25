@@ -28,11 +28,16 @@ class Controller
         }
 
         $code2pass = Response::HTTP_OK;
-        return $this->response(json_encode([
-                'error' => [
-                    'code' => $code,
-                    'message' => $e->getMessage(),
-                ]
-            ]));
+
+        return $this->response(
+          json_encode(
+            [
+              'error' => [
+                'code' => $code,
+                'message' => $e->getMessage(),
+              ]
+            ]
+          )
+        );
     }
 }

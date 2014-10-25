@@ -7,10 +7,47 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
 use Openlaw\Data\Booklet as BookletData;
 
-class Booklet extends Controller {
+class Booklet extends Controller
+{
     public function index()
     {
-        return 'Booklet index';
+        $booklet_options = [
+          'usage' => [
+            '{booklet}' => 'One booklet by booklet number',
+            '{booklet}/part' => 'One booklet with parts',
+            '{booklet}/part/{part}' => 'One part of a booklet by booklet number and part number',
+            'knesset/{knesset}' => 'All booklets published during a specific knesset',
+            'knesset/{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+            'year/{year}' => 'All booklets published during a specific year',
+            'year/{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
+          ],
+        ];
+
+        return $this->json($booklet_options);
+    }
+
+    public function indexKnesset()
+    {
+        $booklet_options = [
+          'usage' => [
+            '{knesset}' => 'All booklets published during a specific knesset',
+            '{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+          ],
+        ];
+
+        return $this->json($booklet_options);
+    }
+
+    public function indexYear()
+    {
+        $booklet_options = [
+            'usage' => [
+              '{year}' => 'All booklets published during a specific year',
+              '{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
+            ],
+        ];
+
+        return $this->json($booklet_options);
     }
 
     public function single(Request $request, Application $app, BookletData $booklet)
@@ -18,6 +55,7 @@ class Booklet extends Controller {
         if (!$booklet->_id) {
             $app->abort(404, 'The booklet you looked for does not exist.');
         }
+
         return $this->json($booklet);
     }
 
@@ -37,6 +75,7 @@ class Booklet extends Controller {
             }
 
         }
+
         return $this->json($booklets);
     }
 
