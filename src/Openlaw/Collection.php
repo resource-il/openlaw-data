@@ -28,10 +28,7 @@ abstract class Collection implements \JsonSerializable
         $collection = static::init()->find($query);
 
         $multiple = [];
-        $recs = [];
-
         foreach ($collection as $record) {
-            $recs[] = $record;
             $multiple[] = static::factory()->unpack($record);
         }
 
@@ -64,9 +61,6 @@ abstract class Collection implements \JsonSerializable
         $this->mongoCollection = $mongoCollection;
         if (!empty($query)) {
             $this->data = $this->mongoCollection->findOne($query);
-            if (empty($this->data)) {
-                $this->data = $query;
-            }
         }
     }
 
@@ -121,8 +115,8 @@ abstract class Collection implements \JsonSerializable
 
     public function __get($name)
     {
-        if (isset($this->schema[$name]) || $name == '_id') {
-            return isset($this->data[$name]) ? $this->data[$name] : $this->schema[$name];
+        if (array_key_exists($name, $this->schema)) {
+            return array_key_exists($name, $this->data) ? $this->data[$name] : $this->schema[$name];
         }
 
         return null;
@@ -130,14 +124,14 @@ abstract class Collection implements \JsonSerializable
 
     public function __set($name, $value)
     {
-        if (isset($this->schema[$name])) {
+        if (array_key_exists($name, $this->schema)) {
             $this->data[$name] = $value;
         }
     }
 
     public function __isset($name)
     {
-        return (isset($this->schema[$name]) || $name == '_id') && isset($this->data[$name]);
+        return array_key_exists($name, $this->schema) && array_key_exists($name, $this->data);
     }
 
     public function __unset($name)

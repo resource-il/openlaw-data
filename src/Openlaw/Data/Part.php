@@ -17,10 +17,12 @@ class Part extends Collection
                 $query['origin.knesset_part'] = (string) $part;
             }
         }
+
         return parent::factory($query);
     }
 
     protected $schema = [
+      '_id' => null,
       'booklet' => 0,
       'type' => null,
       'title' => null,

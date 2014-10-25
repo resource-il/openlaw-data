@@ -14,10 +14,26 @@ class Booklet extends Collection
         if (!empty($booklet) && intval($booklet) == $booklet) {
             $query = ['booklet' => (int) $booklet];
         }
+
         return parent::factory($query);
     }
 
+    public static function factoryYear($year = 0)
+    {
+        $query = ['dates.published' => ['$regex' => new \MongoRegex('/^' . $year . '/i')]];
+
+        return static::factoryMultiple($query);
+    }
+
+    public static function factoryKnesset($knesset = 0)
+    {
+        $query = ['knesset' => (int) $knesset];
+
+        return static::factoryMultiple($query);
+    }
+
     protected $schema = [
+      '_id' => null,
       'booklet' => 0,
       'knesset' => 0,
       'dates' => [
@@ -40,6 +56,7 @@ class Booklet extends Collection
         if (empty($this->booklet)) {
             return array();
         }
+
         return Part::factoryMultiple(['booklet' => (int) $this->booklet]);
     }
 
@@ -47,6 +64,7 @@ class Booklet extends Collection
     {
         $this->schema['parts'] = [];
         $this->parts = $this->getParts();
+
         return $this;
     }
 }
