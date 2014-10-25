@@ -5,9 +5,9 @@ namespace Openlaw\Controller;
 use Openlaw\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Openlaw\Booklet\Part as PartData;
+use Openlaw\Data\Part as PartData;
 
-class Booklet extends Controller {
+class Part extends Controller {
     public function index()
     {
         return 'Booklet part index';

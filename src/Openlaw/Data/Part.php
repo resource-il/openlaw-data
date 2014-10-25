@@ -1,6 +1,6 @@
 <?php
 
-namespace Openlaw\Booklet;
+namespace Openlaw\Data;
 
 use Openlaw\Collection;
 

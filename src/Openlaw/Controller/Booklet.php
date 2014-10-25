@@ -5,7 +5,7 @@ namespace Openlaw\Controller;
 use Openlaw\Controller;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Openlaw\Booklet\Booklet as BookletData;
+use Openlaw\Data\Booklet as BookletData;
 
 class Booklet extends Controller {
     public function index()
@@ -15,10 +15,16 @@ class Booklet extends Controller {
 
     public function single(Request $request, Application $app, BookletData $booklet)
     {
-        $include_parts = (bool) $request->query->get('include_parts', 0);
-        if ($include_parts) {
-            $booklet->loadParts();
-        }
         return $this->json($booklet);
+    }
+
+    public function singleWithParts(Request $request, Application $app, BookletData $booklet)
+    {
+        return $this->json($booklet->loadParts());
+    }
+
+    public function singlePart(Request $request, Application $app, BookletData $booklet)
+    {
+
     }
 }
