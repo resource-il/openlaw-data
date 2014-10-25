@@ -13,13 +13,14 @@ class Booklet extends Controller
     {
         $booklet_options = [
           'usage' => [
-            '{booklet}' => 'One booklet by booklet number',
-            '{booklet}/part' => 'One booklet with parts',
-            '{booklet}/part/{part}' => 'One part of a booklet by booklet number and part number',
-            'knesset/{knesset}' => 'All booklets published during a specific knesset',
-            'knesset/{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
-            'year/{year}' => 'All booklets published during a specific year',
-            'year/{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
+            '{booklet}/' => 'One booklet by booklet number',
+            '{booklet}/part/' => 'One booklet with parts',
+            '{booklet}/?part=1' => 'One booklet with parts',
+            '{booklet}/part/{part}/' => 'One part of a booklet by booklet number and part number',
+            'knesset/{knesset}/' => 'All booklets published during a specific knesset',
+            'knesset/{knesset}/?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+            'year/{year}/' => 'All booklets published during a specific year',
+            'year/{year}/?part=1' => 'All booklets published during a specific year, with booklet parts',
           ],
         ];
 
@@ -30,8 +31,8 @@ class Booklet extends Controller
     {
         $booklet_options = [
           'usage' => [
-            '{knesset}' => 'All booklets published during a specific knesset',
-            '{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+            '{knesset}/' => 'All booklets published during a specific knesset',
+            '{knesset}/?part=1' => 'All booklets published during a specific knesset, with booklet parts',
           ],
         ];
 
@@ -42,8 +43,8 @@ class Booklet extends Controller
     {
         $booklet_options = [
             'usage' => [
-              '{year}' => 'All booklets published during a specific year',
-              '{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
+              '{year}/' => 'All booklets published during a specific year',
+              '{year}/?part=1' => 'All booklets published during a specific year, with booklet parts',
             ],
         ];
 
@@ -54,6 +55,11 @@ class Booklet extends Controller
     {
         if (!$booklet->_id) {
             $app->abort(404, 'The booklet you looked for does not exist.');
+        }
+
+        $part = $request->query->get('part', 0);
+        if ($part && intval($part) == $part) {
+            $booklet->loadParts();
         }
 
         return $this->json($booklet);
