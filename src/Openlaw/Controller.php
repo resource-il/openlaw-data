@@ -17,11 +17,11 @@ class Controller
           'content' => $data,
           'usage' => $usage,
           'error' => $error,
-          'license' => 'CC-BY-SA',
+          'license' => 'CC-BY',
           'copyright' => [
             'year' => '2014',
-            'name' => 'OpenLaw a project of The Public Knowledge Workshop (R.O.)',
-            'url' => 'http://www.openlaw.org.il/',
+            'name' => 'The Public Knowledge Workshop',
+            'url' => 'http://www.hasadna.org.il/',
           ],
         ];
 
