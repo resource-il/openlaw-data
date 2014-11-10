@@ -1,3 +1,3 @@
 booklets:
-  prefix: /booklet
+  prefix: /v0/booklet
   resource: routing_booklet.yml
