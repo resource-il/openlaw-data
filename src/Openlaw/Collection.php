@@ -22,6 +22,10 @@ abstract class Collection implements \JsonSerializable
         return new static(static::init(), $query);
     }
 
+    /**
+     * @param array $query
+     * @return array
+     */
     public static function factoryMultiple($query = [])
     {
         /** @var \MongoCursor $collection */
@@ -35,6 +39,9 @@ abstract class Collection implements \JsonSerializable
         return $multiple;
     }
 
+    /**
+     * @return \MongoCollection
+     */
     protected static function init()
     {
         if (empty(static::$collectionName)) {
@@ -56,6 +63,10 @@ abstract class Collection implements \JsonSerializable
     protected $data = [];
     protected $schema = [];
 
+    /**
+     * @param \MongoCollection $mongoCollection
+     * @param array $query
+     */
     protected function __construct(\MongoCollection $mongoCollection = null, $query = [])
     {
         $this->mongoCollection = $mongoCollection;
@@ -64,6 +75,10 @@ abstract class Collection implements \JsonSerializable
         }
     }
 
+    /**
+     * @param $query
+     * @return $this
+     */
     public function load($query)
     {
         if (!empty($query)) {
@@ -76,6 +91,9 @@ abstract class Collection implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return $this
+     */
     public function save()
     {
         $this->mongoCollection->save($this->data);
@@ -83,15 +101,14 @@ abstract class Collection implements \JsonSerializable
         return $this;
     }
 
-    public function pack($filter = [])
-    {
-        return $this->data;
-    }
-
+    /**
+     * @param array $array
+     * @return $this
+     */
     public function unpack($array = [])
     {
         if (!is_array($array)) {
-            throw new Exception(get_called_class() . '::unpack() must be provided with an associated array.');
+            throw new Exception(get_called_class() . '::unpack() must be provided an associated array.');
         }
 
         if (empty($array)) {
@@ -105,6 +122,9 @@ abstract class Collection implements \JsonSerializable
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function jsonSerialize()
     {
         $newData = $this->data;

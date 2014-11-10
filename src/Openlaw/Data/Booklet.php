@@ -8,6 +8,10 @@ class Booklet extends Collection
 {
     protected static $collectionName = 'booklet';
 
+    /**
+     * @param int $booklet
+     * @return Booklet
+     */
     public static function factory($booklet = 0)
     {
         $query = [];
@@ -18,6 +22,10 @@ class Booklet extends Collection
         return parent::factory($query);
     }
 
+    /**
+     * @param int $year
+     * @return array
+     */
     public static function factoryYear($year = 0)
     {
         $query = ['dates.published' => ['$regex' => new \MongoRegex('/^' . $year . '/i')]];
@@ -25,6 +33,10 @@ class Booklet extends Collection
         return static::factoryMultiple($query);
     }
 
+    /**
+     * @param int $knesset
+     * @return array
+     */
     public static function factoryKnesset($knesset = 0)
     {
         $query = ['knesset' => (int) $knesset];
@@ -32,6 +44,9 @@ class Booklet extends Collection
         return static::factoryMultiple($query);
     }
 
+    /**
+     * @var array
+     */
     protected $schema = [
       '_id' => null,
       'booklet' => 0,
@@ -51,6 +66,9 @@ class Booklet extends Collection
       'updated' => 0,
     ];
 
+    /**
+     * @return array
+     */
     public function getParts()
     {
         if (empty($this->booklet)) {
@@ -60,6 +78,9 @@ class Booklet extends Collection
         return Part::factoryMultiple(['booklet' => (int) $this->booklet]);
     }
 
+    /**
+     * @return $this
+     */
     public function loadParts()
     {
         $this->schema['parts'] = [];

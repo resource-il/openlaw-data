@@ -1,8 +1,18 @@
 <?php
 
-require_once __DIR__ . '/../vendor/autoload.php';
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
-$app = new Silex\Application();
+define('PUBLIC_DIR', __DIR__);
+define('BASE_DIR', realpath(PUBLIC_DIR . '/../'));
+define('APP_DIR', BASE_DIR . '/app');
+
+define('OPENLAW_VERSION', '0.1.0');
+
+require_once BASE_DIR . '/vendor/autoload.php';
+
+$app = new Openlaw\Silex\Application();
 $app['debug'] = true;
 
 $app->get(
@@ -14,37 +24,17 @@ $app->get(
 
 $app->error(
   function (\Exception $e, $code) use ($app) {
-      return (new \Openlaw\Controller())->errorHandler($e, $code);
+      return (new \Openlaw\Controller($app))->errorHandler($e, $code);
   }
 );
 
-// Booklets
-$app->get('/booklet/', 'Openlaw\\Controller\\Booklet::index');
-
-$app->get('/booklet/{booklet}/', 'Openlaw\\Controller\\Booklet::single')
-  ->convert('booklet', 'Openlaw\\Data\\Booklet::factory')
-  ->assert('booklet', '\d+');
-
-$app->get('/booklet/{booklet}/part/', 'Openlaw\\Controller\\Booklet::singleWithParts')
-  ->convert('booklet', 'Openlaw\\Data\\Booklet::factory')
-  ->assert('booklet', '\d+');
-
-$app->get('/booklet/year/', 'Openlaw\\Controller\\Booklet::indexYear');
-
-$app->get('/booklet/year/{year}/', 'Openlaw\\Controller\\Booklet::byYear')
-  ->convert('year', 'Openlaw\\Data\\Booklet::factoryYear')
-  ->assert('year', '\d+');
-
-$app->get('/booklet/knesset/', 'Openlaw\\Controller\\Booklet::indexKnesset');
-
-$app->get('/booklet/knesset/{knesset}/', 'Openlaw\\Controller\\Booklet::byKnesset')
-  ->assert('knesset', '\d+')
-  ->convert('knesset', 'Openlaw\\Data\\Booklet::factoryKnesset');
-
-// Parts
-$app->get('/booklet/{booklet}/part/{part}/', 'Openlaw\\Controller\\Part::single')
-  ->assert('booklet', '\d+')
-  ->assert('part', '\d+');
+$app->after(
+  function (Request $request, Response $response) {
+      if ($response instanceof JsonResponse && $callback = $request->query->get('callback', false)) {
+          $response->setCallback($callback);
+      }
+  }
+);
 
 // ... definitions
 

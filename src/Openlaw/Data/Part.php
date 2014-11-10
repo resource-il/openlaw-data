@@ -8,6 +8,11 @@ class Part extends Collection
 {
     protected static $collectionName = 'booklet_part';
 
+    /**
+     * @param int $booklet
+     * @param int $part
+     * @return Collection
+     */
     public static function factory($booklet = 0, $part = 0)
     {
         $query = [];
@@ -21,6 +26,9 @@ class Part extends Collection
         return parent::factory($query);
     }
 
+    /**
+     * @var array
+     */
     protected $schema = [
       '_id' => null,
       'booklet' => 0,

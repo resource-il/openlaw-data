@@ -2,46 +2,21 @@
 
 namespace Openlaw;
 
+use Openlaw\Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 class Controller
 {
-    protected function response($data = '', $headers = [], $code = Response::HTTP_OK)
+    protected $app = null;
+
+    public function __construct(Application $app = null)
     {
-        return new Response($data, $code, $headers);
-    }
-
-    protected function json($data = [], $error = [], $usage = [])
-    {
-        $response = [
-          'content' => $data,
-          'usage' => $usage,
-          'error' => $error,
-          'license' => 'CC-BY',
-          'copyright' => [
-            'year' => '2014',
-            'name' => 'The Public Knowledge Workshop',
-            'url' => 'http://www.hasadna.org.il/',
-          ],
-        ];
-
-        $jsonEncodeOptions = 0;
-        if (!empty($error)) {
-            $jsonEncodeOptions += JSON_FORCE_OBJECT;
-        }
-
-        return $this->response(json_encode($response, $jsonEncodeOptions), ['Content-Type' => 'application/json']);
-    }
-
-    protected function error($data = [])
-    {
-
-        return $this->json([], $data);
+        $this->app = $app;
     }
 
     public function errorHandler(\Exception $e, $code)
     {
-        return $this->json(
+        return $this->app->json(
           [],
           [
             'code' => $code,
