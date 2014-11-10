@@ -8,7 +8,7 @@ define('PUBLIC_DIR', __DIR__);
 define('BASE_DIR', realpath(PUBLIC_DIR . '/../'));
 define('APP_DIR', BASE_DIR . '/app');
 
-define('OPENLAW_VERSION', '0.1.0');
+define('OPENLAW_VERSION', '0.1.1');
 
 require_once BASE_DIR . '/vendor/autoload.php';
 
