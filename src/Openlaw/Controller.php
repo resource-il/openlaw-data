@@ -2,10 +2,18 @@
 
 namespace Openlaw;
 
+use Openlaw\Silex\Application;
 use Symfony\Component\HttpFoundation\Response;
 
 class Controller
 {
+    protected $app = null;
+
+    public function __construct(Application $app = null)
+    {
+        $this->app = $app;
+    }
+
     protected function response($data = '', $headers = [], $code = Response::HTTP_OK)
     {
         return new Response($data, $code, $headers);
@@ -30,7 +38,13 @@ class Controller
             $jsonEncodeOptions += JSON_FORCE_OBJECT;
         }
 
-        return $this->response(json_encode($response, $jsonEncodeOptions), ['Content-Type' => 'application/json']);
+        $json = json_encode($response, $jsonEncodeOptions);
+
+        if (isset($_GET['callback'])) {
+            $json = $_GET['callback'] . '(' . $json . ');';
+        }
+
+        return $this->response($json, ['Content-Type' => 'application/json']);
     }
 
     protected function error($data = [])
@@ -41,7 +55,7 @@ class Controller
 
     public function errorHandler(\Exception $e, $code)
     {
-        return $this->json(
+        return $this->app->json(
           [],
           [
             'code' => $code,

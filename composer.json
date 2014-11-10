@@ -20,7 +20,10 @@
     "prefer-stable": true,
     "require": {
         "php": ">=5.5.0",
-        "silex/silex": "~1.1"
+        "monolog/monolog": "~1.11",
+        "silex/silex": "~1.1",
+        "symfony/config": ">=2.3,<2.6-dev",
+        "symfony/YAML": ">=2.3,<2.6-dev"
     },
     "require-dev": {
         "phpunit/phpunit": "4.*"

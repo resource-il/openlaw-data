@@ -1,0 +1,37 @@
+home:
+  path: /
+  defaults: { _controller: 'Openlaw\Controller\Booklet::index' }
+  methods: [GET]
+
+booklet:
+  path: /{booklet}
+  defaults: { _controller: 'Openlaw\Controller\Booklet::single' }
+  requirements:
+    booklet: \d+
+
+booklet_part:
+  path: /{booklet}/part/{part}
+  defaults: { _controller: 'Openlaw\Controller\Part::single' }
+  requirements:
+    booklet: \d+
+    part: \d+
+
+booklet_years:
+  path: /year/
+  defaults: { _controller: 'Openlaw\Controller\Booklet::indexYear' }
+
+booklet_year:
+  path: /year/{year}
+  defaults: { _controller: 'Openlaw\Controller\Booklet::byYear' }
+  requirements:
+    year: \d+
+
+booklet_knessets:
+  path: /knesset/
+  defaults: { _controller: 'Openlaw\Controller\Booklet::indexKnesset' }
+
+booklet_knesset:
+  path: /knesset/{knesset}
+  defaults: { _controller: 'Openlaw\Controller\Booklet::byKnesset' }
+  requirements:
+    knesset: \d+

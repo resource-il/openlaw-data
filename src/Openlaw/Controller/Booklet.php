@@ -3,67 +3,101 @@
 namespace Openlaw\Controller;
 
 use Openlaw\Controller;
-use Silex\Application;
+use Openlaw\Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Openlaw\Data\Booklet as BookletData;
 
 class Booklet extends Controller
 {
-    public function index()
+    /**
+     * @param Application $app
+     * @return JsonResponse
+     */
+    public function index(Application $app)
     {
         $usage = [
           '{booklet}/' => 'One booklet by booklet number',
-          '{booklet}/part/' => 'One booklet with parts',
+          '{booklet}/part' => 'One booklet with parts',
           '{booklet}/?part=1' => 'One booklet with parts',
-          '{booklet}/part/{part}/' => 'One part of a booklet by booklet number and part number',
-          'knesset/{knesset}/' => 'All booklets published during a specific knesset',
-          'knesset/{knesset}/?part=1' => 'All booklets published during a specific knesset, with booklet parts',
-          'year/{year}/' => 'All booklets published during a specific year',
-          'year/{year}/?part=1' => 'All booklets published during a specific year, with booklet parts',
+          '{booklet}/part/{part}' => 'One part of a booklet by booklet number and part number',
+          'knesset/{knesset}' => 'All booklets published during a specific knesset',
+          'knesset/{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+          'year/{year}' => 'All booklets published during a specific year',
+          'year/{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
         ];
 
-        return $this->json([], [], $usage);
+        return $app->json([], [], $usage);
     }
 
-    public function indexKnesset()
+    /**
+     * @param Application $app
+     * @return JsonResponse
+     */
+    public function indexKnesset(Application $app)
     {
         $usage = [
-          '{knesset}/' => 'All booklets published during a specific knesset',
-          '{knesset}/?part=1' => 'All booklets published during a specific knesset, with booklet parts',
+          '{knesset}' => 'All booklets published during a specific knesset',
+          '{knesset}?part=1' => 'All booklets published during a specific knesset, with booklet parts',
         ];
 
-        return $this->json([], [], $usage);
+        return $app->json([], [], $usage);
     }
 
-    public function indexYear()
+    /**
+     * @param Application $app
+     * @return JsonResponse
+     */
+    public function indexYear(Application $app)
     {
         $usage = [
-          '{year}/' => 'All booklets published during a specific year',
-          '{year}/?part=1' => 'All booklets published during a specific year, with booklet parts',
+          '{year}' => 'All booklets published during a specific year',
+          '{year}?part=1' => 'All booklets published during a specific year, with booklet parts',
         ];
 
-        return $this->json([], [], $usage);
+        return $app->json([], [], $usage);
     }
 
-    public function single(Request $request, Application $app, BookletData $booklet)
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param int $booklet
+     * @return JsonResponse
+     */
+    public function single(Request $request, Application $app, $booklet)
     {
-        if (!$booklet->_id) {
+        $bookletData = BookletData::factory($booklet);
+
+        if (!$bookletData->_id) {
             $app->abort(404, 'The booklet you looked for does not exist.');
         }
 
         $part = $request->query->get('part', 0);
         if ($part && intval($part) == $part) {
-            $booklet->loadParts();
+            $bookletData->loadParts();
         }
 
-        return $this->json($booklet);
+        return $app->json($bookletData);
     }
 
-    public function singleWithParts(Request $request, Application $app, BookletData $booklet)
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param int $booklet
+     * @return JsonResponse
+     */
+    public function singleWithParts(Request $request, Application $app, $booklet)
     {
-        return $this->json($booklet->loadParts());
+        $bookletData = BookletData::factory($booklet);
+        return $app->json($bookletData->loadParts());
     }
 
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param array $booklets
+     * @return JsonResponse
+     */
     public function dataset(Request $request, Application $app, array $booklets = [])
     {
         $part = $request->query->get('part', 0);
@@ -76,16 +110,30 @@ class Booklet extends Controller
 
         }
 
-        return $this->json($booklets);
+        return $app->json($booklets);
     }
 
-    public function byKnesset(Request $request, Application $app, array $knesset = [])
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param int $knesset
+     * @return JsonResponse
+     */
+    public function byKnesset(Request $request, Application $app, $knesset = 0)
     {
-        return $this->dataset($request, $app, $knesset);
+        $knessetBooklets = BookletData::factoryKnesset($knesset);
+        return $this->dataset($request, $app, $knessetBooklets);
     }
 
-    public function byYear(Request $request, Application $app, array $year = [])
+    /**
+     * @param Request $request
+     * @param Application $app
+     * @param int $year
+     * @return JsonResponse
+     */
+    public function byYear(Request $request, Application $app, $year = 0)
     {
-        return $this->dataset($request, $app, $year);
+        $yearBooklets = BookletData::factoryYear($year);
+        return $this->dataset($request, $app, $yearBooklets);
     }
 }
