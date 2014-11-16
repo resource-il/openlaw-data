@@ -18,7 +18,6 @@ class Booklet extends Controller
     {
         $usage = [
           '{booklet}/' => 'One booklet by booklet number',
-          '{booklet}/part' => 'One booklet with parts',
           '{booklet}/?part=1' => 'One booklet with parts',
           '{booklet}/part/{part}' => 'One part of a booklet by booklet number and part number',
           'knesset/{knesset}' => 'All booklets published during a specific knesset',
