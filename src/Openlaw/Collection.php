@@ -29,7 +29,7 @@ abstract class Collection implements \JsonSerializable
     public static function factoryMultiple($query = [])
     {
         /** @var \MongoCursor $collection */
-        $collection = static::init()->find($query);
+        $collection = static::init()->find($query)->sort(['booklet' => 1]);
 
         $multiple = [];
         foreach ($collection as $record) {
