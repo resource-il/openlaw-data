@@ -1,3 +1,7 @@
 booklets:
   prefix: /v0/booklet
   resource: routing_booklet.yml
+
+commands:
+  prefix: /v0/cmd
+  resource: routing_cmd_v0.yml

@@ -1,0 +1,5 @@
+knesset_new:
+  path: /knesset/fetch/booklet
+  defaults: { _controller: 'Openlaw\Controller\Command\Knesset::fetchBooklet' }
+  methods: [GET]
+
