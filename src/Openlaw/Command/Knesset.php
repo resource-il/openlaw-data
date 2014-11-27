@@ -8,7 +8,7 @@ use Openlaw\Silex\Provider\Command;
 
 class Knesset extends Command
 {
-    protected $config = [];
+    use Utils;
 
     public function __construct()
     {
@@ -94,8 +94,7 @@ class Knesset extends Command
             ],
             'created' => time(),
           ]
-        );
-        $booklet->save();
+        )->save();
     }
 
     protected function populatePart(Part &$part, $knesset_booklet = [])
@@ -112,8 +111,7 @@ class Knesset extends Command
             ],
             'created' => time(),
           ]
-        );
-        $part->save();
+        )->save();
     }
 
     protected function parseBooklet($html = '')
@@ -176,25 +174,5 @@ class Knesset extends Command
         }
 
         return $laws;
-    }
-
-    protected function sanitizeString($string = '')
-    {
-        // Replace strings with strings
-        $string = str_replace(array(';', '–', '―'), array(',', '-', '-'), $string);
-        // Replace un-wanted single quotes with simple single quote
-        $string = str_replace(array('‘', '`'), '\'', $string);
-        // Replace un-wanted double-quotes with simple double-quote
-        $string = str_replace(array('״', '”', '“'), '"', $string);
-        // Remove strings
-        $string = str_replace(array('=', '\\', '?', json_decode('"\u200f"')), '', $string);
-        // Replace unicode spaces with simple space
-        $string = str_replace(array(json_decode('"\u2002"'), json_decode('"\u2003"'), '  '), ' ', $string);
-        // Replace multiple spaces with one space
-        $string = preg_replace('/[\s\t]+/', ' ', $string);
-        // Remove white spaces from beginning and end
-        $string = trim($string);
-
-        return $string;
     }
 }
