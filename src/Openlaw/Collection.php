@@ -132,7 +132,7 @@ abstract class Collection implements \JsonSerializable
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->schema)) {
+        if ($this->data && array_key_exists($name, $this->schema)) {
             return array_key_exists($name, $this->data) ? $this->data[$name] : $this->schema[$name];
         }
 
