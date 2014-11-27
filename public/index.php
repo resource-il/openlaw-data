@@ -10,6 +10,8 @@ define('APP_DIR', BASE_DIR . '/app');
 
 define('OPENLAW_VERSION', '0.1.2');
 
+define('REQUEST_TIME', time());
+
 require_once BASE_DIR . '/vendor/autoload.php';
 
 $app = new Openlaw\Silex\Application();

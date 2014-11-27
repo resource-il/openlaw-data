@@ -19,7 +19,7 @@ class Part extends Collection
         if (!empty($booklet) && intval($booklet) == $booklet) {
             $query['booklet'] = (int) $booklet;
             if (!empty($part) && intval($part) == $part) {
-                $query['origin.knesset_part'] = (string) $part;
+                $query['origin.knesset_part'] = (int) $part;
             }
         }
 

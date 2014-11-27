@@ -29,7 +29,7 @@ abstract class Collection implements \JsonSerializable
     public static function factoryMultiple($query = [])
     {
         /** @var \MongoCursor $collection */
-        $collection = static::init()->find($query);
+        $collection = static::init()->find($query)->sort(['booklet' => 1]);
 
         $multiple = [];
         foreach ($collection as $record) {
@@ -111,12 +111,9 @@ abstract class Collection implements \JsonSerializable
             throw new Exception(get_called_class() . '::unpack() must be provided an associated array.');
         }
 
-        if (empty($array)) {
-            return $this;
-        }
-
-        foreach ($array as $key => $value) {
-            $this->{$key} = $value;
+        if (!empty($array)) foreach ($array as $key => $value) {
+            // Use the magic method so other properties are not overridden
+            $this->__set($key, $value);
         }
 
         return $this;
@@ -135,7 +132,7 @@ abstract class Collection implements \JsonSerializable
 
     public function __get($name)
     {
-        if (array_key_exists($name, $this->schema)) {
+        if ($this->data && array_key_exists($name, $this->schema)) {
             return array_key_exists($name, $this->data) ? $this->data[$name] : $this->schema[$name];
         }
 
