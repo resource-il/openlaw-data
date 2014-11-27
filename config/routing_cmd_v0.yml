@@ -3,3 +3,8 @@ knesset_new:
   defaults: { _controller: 'Openlaw\Controller\Command\Knesset::fetchBooklet' }
   methods: [GET]
 
+justice_new:
+  path: /justice/fetch/booklet
+  defaults: { _controller: 'Openlaw\Controller\Command\Justice::fetchBooklet' }
+  methods: [GET]
+
