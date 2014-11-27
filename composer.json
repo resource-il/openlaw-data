@@ -1,6 +1,6 @@
 {
     "name": "openlaw/data",
-    "version": "0.1.2",
+    "version": "0.1.3",
     "description": "OpenLaw's data warehousing project",
     "license": "MIT",
     "type": "project",
